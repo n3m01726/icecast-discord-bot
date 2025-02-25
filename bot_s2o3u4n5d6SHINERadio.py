@@ -181,7 +181,7 @@ async def ensure_connected():
         await voice_channel.connect()
 
 @bot.command()
-@commands.has_role(ADMIN_ROLE)
+@commands.has_role(ADMIN_ROLE_ID)
 async def stats(ctx):
     """Displays the current number of listeners."""
     try:
