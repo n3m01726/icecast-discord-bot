@@ -22,14 +22,14 @@ locale.setlocale(locale.LC_ALL, 'fr_FR.UTF-8')  # Adapter selon ton serveur
 # Load environment variables
 load_dotenv()
 
-# Configuration
+# Configuration variables
 STREAM_URL = "https://stream.soundshineradio.com:8445/stream"
 JSON_URL = "https://stream.soundshineradio.com:8445/status-json.xsl"
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-VOICE_CHANNEL_ID = 1324247709502406748
-ADMIN_CHANNEL_NAME = "bot-crap"
 BOT_ROLE_NAME = "soundSHINE Radio"
-ADMIN_ROLE = "🛠️ Admin"
+VOICE_CHANNEL_ID = 1324247709502406748
+ADMINBOT_CHANNEL_ID=1338181640081510401 # AdminBot channel
+ADMIN_ROLE_ID=1292528573881651372 # Admin role
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -151,8 +151,8 @@ async def check_stream_online():
 @bot.command()
 async def stop(ctx):
     """Command to stop the stream (only available in the #admin channel)."""
-    if ctx.channel.name != ADMIN_CHANNEL_NAME:
-        await ctx.send(f"This command can only be used in the #{ADMIN_CHANNEL_NAME} channel.")
+    if ctx.channel.id != ADMINBOT_CHANNEL_ID:
+        await ctx.send(f"This command can only be used in the designated admin channel.")
         return
 
     if ctx.voice_client:
@@ -272,9 +272,7 @@ async def on_message(message):
 
     # Vérifie si le message est en privé et contient "scan"
     if isinstance(message.channel, discord.DMChannel) and message.content.lower() == "scan":
-        LOG_CHANNEL_ID = 1292526077281046600  # Remplace avec l'ID du canal voulu
-
-        log_channel = bot.get_channel(LOG_CHANNEL_ID)
+        log_channel = bot.get_channel(ADMINBOT_CHANNEL_ID)
 
         if log_channel:
             await log_channel.send("--== Scan des musiques en cours ==--")
