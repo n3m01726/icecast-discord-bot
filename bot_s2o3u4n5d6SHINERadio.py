@@ -15,6 +15,8 @@ import aiohttp
 import discord
 from discord.ui import Select, View
 from datetime import datetime, timezone
+import json
+from dateutil.relativedelta import relativedelta
 
 sys.stdout.reconfigure(encoding='utf-8')
 locale.setlocale(locale.LC_ALL, 'fr_FR.UTF-8')  # Adapter selon ton serveur
@@ -30,6 +32,7 @@ BOT_ROLE_NAME = "soundSHINE Radio"
 VOICE_CHANNEL_ID = 1324247709502406748
 ADMINBOT_CHANNEL_ID=1338181640081510401 # AdminBot channel
 ADMIN_ROLE_ID=1292528573881651372 # Admin role
+ANNOUNCEMENTS_CHANNEL_ID = 1334280886895775794  # Remplace par l'ID du canal annonces
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -67,14 +70,9 @@ async def update_status():
                 logging.info(f"Current song fetched: {current_song}")
                 await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.custom, name="custom", state=f"🎧 {current_song}"))
 
-
-
-
         except aiohttp.ClientError as e:
             logging.error(f"Error fetching metadata or updating status: {e}")
             await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="Soundshine Radio"))  # Statut par défaut
-
-
 
 @bot.command()
 async def play(ctx):
@@ -184,6 +182,10 @@ async def ensure_connected():
 @commands.has_role(ADMIN_ROLE_ID)
 async def stats(ctx):
     """Displays the current number of listeners."""
+    if ctx.channel.id != ADMINBOT_CHANNEL_ID:
+        await ctx.send(f"This command can only be used in the designated admin channel.")
+        return
+
     try:
         response = requests.get(JSON_URL)
         response.raise_for_status()
@@ -316,20 +318,48 @@ async def quiz(ctx):
 async def check_scheduled_events():
     """Vérifie et démarre les événements prévus si l'heure est atteinte."""
     guild = bot.guilds[0]  # Modifier si nécessaire
-    events = await guild.fetch_scheduled_events()  # Récupérer les événements
+
+    # Charger les événements depuis le fichier JSON
+    with open("events.json", "r", encoding="utf-8") as file:
+        events = json.load(file)
 
     now = datetime.now(timezone.utc)  # Heure actuelle en UTC
 
     for event in events:
-        if event.status == discord.EventStatus.scheduled:
-            time_diff = (event.start_time - now).total_seconds()
-            
-            # Vérifier si l'événement est censé commencer dans les 5 minutes
-            if 0 <= time_diff <= 300:
-                try:
-                    await event.start()
-                    print(f"✅ L'événement {event.name} a été lancé automatiquement !")
-                except Exception as e:
-                    print(f"❌ Impossible de démarrer {event.name} : {e}")
+        start_time = datetime.fromisoformat(event["start_time"].replace("Z", "+00:00"))
+        end_time = datetime.fromisoformat(event["end_time"].replace("Z", "+00:00"))
+        recurrence = event.get("recurrence")
+        days = event.get("days", [])
+
+        # Gérer la récurrence
+        while start_time < now or start_time.weekday() not in [datetime.strptime(day, '%A').weekday() for day in days]:
+            if recurrence == "daily":
+                start_time += relativedelta(days=1)
+                end_time += relativedelta(days=1)
+            elif recurrence == "weekly":
+                start_time += relativedelta(weeks=1)
+                end_time += relativedelta(weeks=1)
+            elif recurrence == "monthly":
+                start_time += relativedelta(months=1)
+                end_time += relativedelta(months=1)
+            else:
+                break
+
+        time_diff = (start_time - now).total_seconds()
+
+        # Vérifier si l'événement est censé commencer dans les 5 minutes
+        if 0 <= time_diff <= 300:
+            try:
+                # Mettre à jour le sujet de la conférence
+                conference_channel = bot.get_channel(VOICE_CHANNEL_ID)
+                await conference_channel.edit(topic=f"{event['name']}")
+
+                # Envoyer un message dans le canal annonces
+                announcements_channel = bot.get_channel(ANNOUNCEMENTS_CHANNEL_ID)
+                await announcements_channel.send(f"@everyone L'événement **{event['name']}** commence maintenant ! | **{event['name']}** is starting now!")
+
+                print(f"✅ L'événement {event['name']} a été lancé automatiquement !")
+            except Exception as e:
+                print(f"❌ Impossible de démarrer {event['name']} : {e}")
 
 bot.run(BOT_TOKEN)
