@@ -16,6 +16,8 @@ import discord
 from discord.ui import Select, View
 from datetime import datetime, timezone
 import json
+import pytz
+from pytz import timezone
 from dateutil.relativedelta import relativedelta
 
 sys.stdout.reconfigure(encoding='utf-8')
@@ -323,7 +325,8 @@ async def check_scheduled_events():
     with open("events.json", "r", encoding="utf-8") as file:
         events = json.load(file)
 
-    now = datetime.now(timezone.utc)  # Heure actuelle en UTC
+        montreal_tz = timezone('America/Toronto')
+        now = datetime.now(montreal_tz)
 
     for event in events:
         start_time = datetime.fromisoformat(event["start_time"].replace("Z", "+00:00"))
