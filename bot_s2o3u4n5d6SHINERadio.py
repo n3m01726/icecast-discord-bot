@@ -329,8 +329,8 @@ async def check_scheduled_events():
         now = datetime.now(montreal_tz)
 
     for event in events:
-        start_time = datetime.fromisoformat(event["start_time"].replace("Z", "+00:00"))
-        end_time = datetime.fromisoformat(event["end_time"].replace("Z", "+00:00"))
+        start_time = datetime.fromisoformat(event["start_time"].replace("Z", "+00:00")).astimezone(montreal_tz)
+        end_time = datetime.fromisoformat(event["end_time"].replace("Z", "+00:00")).astimezone(montreal_tz)
         recurrence = event.get("recurrence")
         days = event.get("days", [])
 
