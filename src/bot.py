@@ -11,12 +11,15 @@ import locale
 # Load environment variables
 load_dotenv()
 
-# Configuration
+# Configuration variables
+STREAM_URL = "https://stream.soundshineradio.com:8445/stream"
+JSON_URL = "https://stream.soundshineradio.com:8445/status-json.xsl"
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-VOICE_CHANNEL_ID = int(os.getenv("VOICE_CHANNEL_ID"))
-ADMIN_CHANNEL_ID = int(os.getenv("ADMIN_CHANNEL_ID"))
-LOG_CHANNEL_ID = int(os.getenv("LOG_CHANNEL_ID"))
-ADMIN_ROLE = "🛠️ Admin"
+BOT_ROLE_NAME = "soundSHINE Radio"
+VOICE_CHANNEL_ID = 1324247709502406748
+ADMINBOT_CHANNEL_ID=1338181640081510401 # AdminBot channel
+ADMIN_ROLE_ID=1292528573881651372 # Admin role
+ANNOUNCEMENTS_CHANNEL_ID = 1334280886895775794  # Remplace par l'ID du canal annonces
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -42,7 +45,6 @@ bot.load_extension("events.on_ready")
 bot.load_extension("events.on_message")
 bot.load_extension("tasks.update_status")
 bot.load_extension("tasks.ensure_connected")
-bot.load_extension("tasks.check_scheduled_events")
 
 sys.stdout.reconfigure(encoding='utf-8')
 locale.setlocale(locale.LC_ALL, 'fr_FR.UTF-8')  # Adapter selon ton serveur
