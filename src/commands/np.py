@@ -12,6 +12,7 @@ class NowPlayingCommand(commands.Cog):
     @commands.command()
     async def np(self, ctx):
         """Displays the current song."""
+        logging.info("Command np called")
         try:
             response = requests.get(JSON_URL)
             response.raise_for_status()
@@ -22,5 +23,5 @@ class NowPlayingCommand(commands.Cog):
             await ctx.send("Unable to fetch the current song.")
             logging.error(f"Error: {e}")
 
-def setup(bot):
-    bot.add_cog(NowPlayingCommand(bot))
+async def setup(bot):
+    await bot.add_cog(NowPlayingCommand(bot))

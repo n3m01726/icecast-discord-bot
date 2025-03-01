@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands, tasks
 import os
-from soundshine_bot.src.bot import bot
 
 VOICE_CHANNEL_ID = int(os.getenv("VOICE_CHANNEL_ID"))
 
@@ -15,5 +14,5 @@ class EnsureConnectedTask(commands.Cog):
         if voice_channel and not self.bot.voice_clients:
             await voice_channel.connect()
 
-def setup(bot):
-    bot.add_cog(EnsureConnectedTask(bot))
+async def setup(bot):
+    await bot.add_cog(EnsureConnectedTask(bot))

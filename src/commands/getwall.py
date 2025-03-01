@@ -22,5 +22,5 @@ class GetWallCommand(commands.Cog):
             await ctx.send("Erreur lors de la récupération de l'image.")
             logging.error(f"Error fetching photo: {e}")
 
-def setup(bot):
-    bot.add_cog(GetWallCommand(bot))
+async def setup(bot):
+    await bot.add_cog(GetWallCommand(bot))

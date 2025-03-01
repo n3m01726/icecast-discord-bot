@@ -35,5 +35,5 @@ class StatsCommand(commands.Cog):
             await ctx.send("Unable to fetch statistics.")
             logging.error(f"Error: {e}")
 
-def setup(bot):
-    bot.add_cog(StatsCommand(bot))
+async def setup(bot):
+    await bot.add_cog(StatsCommand(bot))

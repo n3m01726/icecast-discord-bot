@@ -16,11 +16,12 @@ class StopCommand(commands.Cog):
             await ctx.send(f"This command can only be used in the admin channel.")
             return
 
-        if ctx.voice_client:
-            await ctx.voice_client.disconnect()
-            await ctx.send("The stream has stopped and the bot has left the voice channel.")
-        else:
-            await ctx.send("The bot is not connected to a voice channel.")
+        if ctx.voice_client is None:
+            await ctx.send("I am not connected to a voice channel.")
+            return
 
-def setup(bot):
-    bot.add_cog(StopCommand(bot))
+        await ctx.voice_client.disconnect()
+        await ctx.send("Disconnected from the voice channel.")
+
+async def setup(bot):
+    await bot.add_cog(StopCommand(bot))

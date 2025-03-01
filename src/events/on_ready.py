@@ -1,9 +1,8 @@
-import logging
+import discord
 from discord.ext import commands, tasks
 from datetime import datetime, timezone
-from src.tasks.update_status import update_status
-from src.tasks.ensure_connected import ensure_connected
-from src.tasks.check_scheduled_events import check_scheduled_events
+from tasks.update_status import UpdateStatusTask
+from tasks.ensure_connected import EnsureConnectedTask
 
 class OnReadyEvent(commands.Cog):
     def __init__(self, bot):
@@ -11,10 +10,9 @@ class OnReadyEvent(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
+        print(f'Logged in as {self.bot.user.name}')
         self.bot.get_cog("UpdateStatusTask").update_status.start()
         self.bot.get_cog("EnsureConnectedTask").ensure_connected.start()
-        self.bot.get_cog("CheckScheduledEventsTask").check_scheduled_events.start()
-        logging.info(f"{self.bot.user.name} is online!")
 
-def setup(bot):
-    bot.add_cog(OnReadyEvent(bot))
+async def setup(bot):
+    await bot.add_cog(OnReadyEvent(bot))

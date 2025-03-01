@@ -8,7 +8,7 @@ from utils.check_stream_online import check_stream_online
 # Configuration
 STREAM_URL = "https://stream.soundshineradio.com:8445/stream"
 JSON_URL = "https://stream.soundshineradio.com:8445/status-json.xsl"
-VOICE_CHANNEL_ID = int(os.getenv("VOICE_CHANNEL_ID"))
+VOICE_CHANNEL_ID = os.getenv("VOICE_CHANNEL_ID")
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -52,5 +52,5 @@ class PlayCommand(commands.Cog):
         vc.play(discord.FFmpegPCMAudio(STREAM_URL), after=lambda e: logging.info("Stream ended"))
         await ctx.send("The stream has started!")
 
-def setup(bot):
-    bot.add_cog(PlayCommand(bot))
+async def setup(bot):
+    await bot.add_cog(PlayCommand(bot))

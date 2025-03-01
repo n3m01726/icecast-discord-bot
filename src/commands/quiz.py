@@ -1,6 +1,7 @@
 import random
 import discord
 from discord.ext import commands
+import asyncio
 
 class Quiz(commands.Cog):
     def __init__(self, bot):
@@ -29,5 +30,5 @@ class Quiz(commands.Cog):
         
         await ctx.send(f"✅ La bonne réponse était {question['answer']} !")
 
-def setup(bot):
-    bot.add_cog(Quiz(bot))
+async def setup(bot):
+    await bot.add_cog(Quiz(bot))

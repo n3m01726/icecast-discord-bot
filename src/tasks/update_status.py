@@ -34,5 +34,5 @@ class UpdateStatusTask(commands.Cog):
                 logging.error(f"Error fetching metadata or updating status: {e}")
                 await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="Soundshine Radio"))
 
-def setup(bot):
-    bot.add_cog(UpdateStatusTask(bot))
+async def setup(bot):
+    await bot.add_cog(UpdateStatusTask(bot))

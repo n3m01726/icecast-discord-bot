@@ -43,5 +43,5 @@ class ScheduleCommand(commands.Cog):
             await ctx.send("❌ Impossible de lire la programmation.")
             print(f"Erreur : {e}")
 
-def setup(bot):
-    bot.add_cog(ScheduleCommand(bot))
+async def setup(bot):
+    await bot.add_cog(ScheduleCommand(bot))    
