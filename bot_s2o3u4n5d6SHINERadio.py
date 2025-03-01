@@ -49,7 +49,6 @@ bot = commands.Bot(command_prefix="!s", intents=intents)
 
 @bot.event
 async def on_ready():
-    check_scheduled_events.start()  # Lancer la vérification auto
     ensure_connected.start()
     update_status.start()
     logging.info(f"{bot.user.name} is online!")
@@ -315,54 +314,5 @@ async def quiz(ctx):
     
     # Afficher la réponse correcte
     await ctx.send(f"✅ La bonne réponse était {question['answer']} !")
-
-@tasks.loop(minutes=1)
-async def check_scheduled_events():
-    """Vérifie et démarre les événements prévus si l'heure est atteinte."""
-    guild = bot.guilds[0]  # Modifier si nécessaire
-
-    # Charger les événements depuis le fichier JSON
-    with open("events.json", "r", encoding="utf-8") as file:
-        events = json.load(file)
-
-        montreal_tz = timezone('America/Toronto')
-        now = datetime.now(montreal_tz)
-
-    for event in events:
-        start_time = datetime.fromisoformat(event["start_time"].replace("Z", "+00:00")).astimezone(montreal_tz)
-        end_time = datetime.fromisoformat(event["end_time"].replace("Z", "+00:00")).astimezone(montreal_tz)
-        recurrence = event.get("recurrence")
-        days = event.get("days", [])
-
-        # Gérer la récurrence
-        while start_time < now or start_time.weekday() not in [datetime.strptime(day, '%A').weekday() for day in days]:
-            if recurrence == "daily":
-                start_time += relativedelta(days=1)
-                end_time += relativedelta(days=1)
-            elif recurrence == "weekly":
-                start_time += relativedelta(weeks=1)
-                end_time += relativedelta(weeks=1)
-            elif recurrence == "monthly":
-                start_time += relativedelta(months=1)
-                end_time += relativedelta(months=1)
-            else:
-                break
-
-        time_diff = (start_time - now).total_seconds()
-
-        # Vérifier si l'événement est censé commencer dans les 5 minutes
-        if 0 <= time_diff <= 300:
-            try:
-                # Mettre à jour le sujet de la conférence
-                conference_channel = bot.get_channel(VOICE_CHANNEL_ID)
-                await conference_channel.edit(topic=f"{event['name']}")
-
-                # Envoyer un message dans le canal annonces
-                announcements_channel = bot.get_channel(ANNOUNCEMENTS_CHANNEL_ID)
-                await announcements_channel.send(f"@everyone L'événement **{event['name']}** commence maintenant ! | **{event['name']}** is starting now!")
-
-                print(f"✅ L'événement {event['name']} a été lancé automatiquement !")
-            except Exception as e:
-                print(f"❌ Impossible de démarrer {event['name']} : {e}")
 
 bot.run(BOT_TOKEN)
