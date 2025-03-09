@@ -39,9 +39,29 @@ const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'
 for (const file of eventFiles) {
     const event = require(path.join(eventsPath, file));
     if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args));
+        client.once(event.name, (...args) => event.execute(...args)); // Événements déclenchés une seule fois
     } else {
-        client.on(event.name, (...args) => event.execute(...args));
+        client.on(event.name, (...args) => event.execute(...args)); // Événements déclenchés plusieurs fois
+    }
+    console.log(`✅ Événement chargé: ${event.name}`);
+}
+
+// Charger les tâches
+const tasksPath = path.join(__dirname, 'tasks');
+const taskFiles = fs.readdirSync(tasksPath).filter(file => file.endsWith('.js'));
+
+for (const file of taskFiles) {
+    const task = require(path.join(tasksPath, file));
+    if (task.name) {
+        // Pour chaque tâche, on lance un intervalle si nécessaire
+        if (task.interval) {
+            setInterval(() => task.execute(client), task.interval); // On suppose que task.interval est en millisecondes
+        } else {
+            task.execute(client); // Tâche exécutée immédiatement
+        }
+        console.log(`✅ Tâche chargée: ${task.name}`);
+    } else {
+        console.warn(`⚠️ La tâche ${file} n'a pas de nom défini.`);
     }
 }
 
