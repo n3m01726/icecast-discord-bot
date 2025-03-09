@@ -54,7 +54,6 @@ Welcome to the Soundshine Radio Bot project! This bot is designed to provide a s
   - `!s stats` to view stream statistics (admin only).
   - `!s schedule` to view the programming schedule.
   - `!s getwall` to get a random wallpaper.
-  - `!s quiz` to start a quiz.
 
 ## Contributing
 
