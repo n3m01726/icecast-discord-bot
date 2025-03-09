@@ -2,6 +2,7 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { BOT_TOKEN, PREFIX } = require('./config');
 const fs = require('fs');
 const path = require('path');
+const { updateStatus } = require('./tasks/updateStatus'); // Importer la fonction updateStatus
 
 // Création du client avec les intents nécessaires
 const client = new Client({
@@ -9,6 +10,7 @@ const client = new Client({
         GatewayIntentBits.Guilds, // pour les événements de guild
         GatewayIntentBits.GuildMessages, // pour recevoir les messages de guild
         GatewayIntentBits.MessageContent, // nécessaire pour lire le contenu des messages
+        GatewayIntentBits.GuildVoiceStates, // nécessaire pour les états vocaux
     ],
 });
 
@@ -64,5 +66,6 @@ for (const file of taskFiles) {
         console.warn(`⚠️ La tâche ${file} n'a pas de nom défini.`);
     }
 }
+
 // Démarrer le bot
 client.login(BOT_TOKEN);
