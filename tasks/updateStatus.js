@@ -5,6 +5,12 @@ module.exports = {
   name: 'updateStatus',
   description: 'Mise à jour du statut du bot',
   async execute(client) {
+    // Vérifie que le bot est prêt avant d'essayer de mettre à jour le statut
+    if (!client.user) {
+      console.error('Le client n\'est pas prêt !');
+      return;
+    }
+
     try {
       // Vérification de l'URL avant de procéder
       if (!JSON_URL) {
