@@ -64,6 +64,5 @@ for (const file of taskFiles) {
         console.warn(`⚠️ La tâche ${file} n'a pas de nom défini.`);
     }
 }
-
 // Démarrer le bot
 client.login(BOT_TOKEN);
