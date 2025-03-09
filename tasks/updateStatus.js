@@ -14,11 +14,11 @@ module.exports = {
       console.log('Current Song:', currentSong);
 
       // Mise à jour du statut
-      await client.user.setActivity(`🎧 ${currentSong}`, { type: 'LISTENING' });
+      bot.user.setActivity("🎧 ${currentSong}", {type: 2});
       console.log(`Updated status to: ${currentSong}`);
     } catch (error) {
       console.error('Error updating status:', error);
-      await client.user.setActivity('Soundshine Radio', { type: 'LISTENING' });
+      bot.user.setActivity("Soundshine Radio", {type: 2});
       console.log('Fallback activity set to Soundshine Radio');
     }
   },
