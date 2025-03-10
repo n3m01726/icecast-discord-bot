@@ -1,10 +1,9 @@
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 const { checkStreamOnline } = require('../utils/checkStreamOnline');
-const STREAM_URL = "https://stream.soundshineradio.com:8445/stream";
-
+const { STREAM_URL } = require('../config');
 module.exports = {
     name: 'play',
-    description: 'Play the stream in the voice channel',
+    description: 'Play the stream in the voice channel (including Stage Channels)',
     async execute(message) {
         const member = message.member;
         const voiceChannel = member.voice.channel;
@@ -23,7 +22,18 @@ module.exports = {
             channelId: voiceChannel.id,
             guildId: message.guild.id,
             adapterCreator: message.guild.voiceAdapterCreator,
+            selfDeaf: false, // Ne pas se rendre sourd pour pouvoir écouter le stage
         });
+
+        // Vérifier si c'est un Stage Channel et demander la parole
+        if (voiceChannel.type === 13) { // Type 13 = Stage Channel
+            try {
+                await message.guild.members.me.voice.setSuppressed(false);
+                console.log("✅ Request to Speak sent!");
+            } catch (error) {
+                console.warn("⚠️ Unable to request to speak. The bot might not have the necessary permissions.");
+            }
+        }
 
         // Play the stream
         const player = createAudioPlayer();
@@ -32,8 +42,11 @@ module.exports = {
 
         connection.subscribe(player);
 
-        player.on(AudioPlayerStatus.Idle, () => connection.destroy()); // Disconnect after the stream ends
+        player.on(AudioPlayerStatus.Idle, () => {
+            console.log("Stream ended, disconnecting...");
+            connection.destroy();
+        });
 
-        return message.reply("The stream is now playing!");
+        return message.reply("🎶 The stream is now playing!");
     },
 };

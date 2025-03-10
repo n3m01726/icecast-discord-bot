@@ -5,9 +5,9 @@ module.exports = {
     STREAM_URL: "https://stream.soundshineradio.com:8445/stream",
     JSON_URL: "https://stream.soundshineradio.com:8445/status-json.xsl",
     BOT_ROLE_NAME: "soundSHINE Radio",
-    VOICE_CHANNEL_ID: '1348433147469238393', // Assurez-vous que cet ID est correct
-    ADMINBOT_CHANNEL_ID: '1333146428465348644', // Assurez-vous que cet ID est correct
-    ADMIN_ROLE_ID: '1292528573881651372', // Assurez-vous que cet ID est correct
-    ANNOUNCEMENTS_CHANNEL_ID: '1333146428465348642', // Assurez-vous que cet ID est correct
+    VOICE_CHANNEL_ID: process.env.VOICE_CHANNEL_ID,
+    ADMINBOT_CHANNEL_ID: process.env.ADMINBOT_CHANNEL_ID,
+    ADMIN_ROLE_ID: process.env.ADMIN_ROLE_ID,
+    ANNOUNCEMENTS_CHANNEL_ID: process.env.ANNOUNCEMENTS_CHANNEL_ID,
     PREFIX: '!s'
 };
