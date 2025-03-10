@@ -5,6 +5,7 @@ module.exports = {
 
         // Vérifie si le message est défini et s'il provient d'un bot, pour éviter de répondre au bot lui-même
         if (!message || !message.author || message.author.bot) return;
+        if (message.mentions.has(message.client.user)) return;
 
         // Vérifie si le message commence par le préfixe défini
         const prefix = message.client.config.PREFIX;
