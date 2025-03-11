@@ -1,6 +1,5 @@
 const axios = require('axios');
 const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_API;
-
 module.exports = {
   name: 'getwall',
   description: 'Fetches a random photo from Unsplash',

@@ -20,3 +20,10 @@ Thumbs.db
 .idea/
 *.swp
 _old/
+
+# Dossiers de build/compilation
+/dist/
+/build/
+
+# Dossier de couverture de code Jest
+/coverage/
