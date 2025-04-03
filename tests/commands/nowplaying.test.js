@@ -27,7 +27,7 @@ describe('nowplaying command', () => {
         await execute(message);
 
         expect(axios.get).toHaveBeenCalledWith("https://stream.soundshineradio.com:8445/status-json.xsl");
-        expect(message.reply).toHaveBeenCalledWith('🎶 Now playing: **Test Song - Test Artist**');
+        expect(message.reply).toHaveBeenCalledWith('Présentement | 🎶 Now playing: **Test Song - Test Artist**');
     });
 
     it('should reply with a default message when no song information is available', async () => {
