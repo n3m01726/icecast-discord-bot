@@ -49,8 +49,6 @@ Commande	| Description
 | !sstats | Affiche les statistiques de la radio| 
 
 ### 📌 TODO / Améliorations futures
-- Ajouter un dashboard web avec Svelte (à évaluer)
-- Optimiser la gestion des erreurs et de la reconnexion automatique
 
 ### 🤝 Contribuer
 Toute aide est bienvenue! Ouvre une issue ou une pull request si tu souhaites proposer une amélioration!
