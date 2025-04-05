@@ -50,7 +50,6 @@ Commande	| Description
 
 ### 📌 TODO / Améliorations futures
 - Ajouter un dashboard web avec Svelte (à évaluer)
-- Intégrer un système de logs avancé
 - Optimiser la gestion des erreurs et de la reconnexion automatique
 
 ### 🤝 Contribuer
