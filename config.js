@@ -9,5 +9,5 @@ module.exports = {
     PREFIX: '!s',
     STREAM_URL: "https://stream.soundshineradio.com:8445/stream",
     JSON_URL: "https://stream.soundshineradio.com:8445/status-json.xsl",
-    BOT_ROLE_NAME: "soundSHINE Radio",
+    BOT_ROLE_NAME: "soundSHINE",
 };

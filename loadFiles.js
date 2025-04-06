@@ -66,7 +66,7 @@ const loadFiles = async (folderName, type, client) => {
           break;
 
         case 'util':
-          logger.custom('UTIL', `util file loaded : ${file}`, 'gray');
+          logger.custom('UTIL', `file loaded : ${file}`, 'gray');
           break;
 
         default:
