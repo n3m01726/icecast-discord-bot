@@ -1,6 +1,6 @@
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 const { checkStreamOnline } = require('../utils/checkStreamOnline');
-const { STREAM_URL } = require('../config');
+const { STREAM_URL } = "https://stream.soundshineradio.com:8445/stream";
 module.exports = {
     name: 'play',
     description: 'Play the stream in the voice channel (including Stage Channels)',
