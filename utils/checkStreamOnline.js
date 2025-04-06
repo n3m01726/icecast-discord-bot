@@ -1,6 +1,5 @@
 const axios = require('axios');
-require('dotenv').config();
-const { JSON_URL } = process.env.JSON_URL;
+const JSON_URL = "https://stream.soundshineradio.com:8445/status-json.xsl";
 
 async function checkStreamOnline() {
     try {

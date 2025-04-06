@@ -11,6 +11,7 @@ async function updateStatus(client) {
       currentSong = data.icestats.source.title || "No title available";
     }
 
+    console.log('Current Song:', currentSong);
     await client.user.setActivity({ name: `📀 ${currentSong}`, type: ActivityType.Custom, url: 'https://soundshineradio.com' });
     console.log(`Updated status to: ${currentSong}`);
   } catch (error) {
