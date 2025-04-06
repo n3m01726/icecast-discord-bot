@@ -1,5 +1,6 @@
 const axios = require('axios');
 const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_API;
+
 module.exports = {
   name: 'getwall',
   description: 'Fetches a random photo from Unsplash',
@@ -9,7 +10,7 @@ module.exports = {
       const photoUrl = response.data[0]?.urls?.regular;
 
       if (photoUrl) {
-        message.reply(photoUrl);
+        message.reply(photoUrl); // Envoi de la photo à l'utilisateur qui a envoyé la commande
       } else {
         message.reply("Couldn't fetch a photo, try again later.");
       }

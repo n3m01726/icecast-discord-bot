@@ -1,93 +1,41 @@
+// index.js
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { BOT_TOKEN, PREFIX } = require('./config');
-const fs = require('fs');
-const path = require('path');
-
-// Création du client avec les intents nécessaires
+const loadFiles = require('./loadFiles');
+const logger = require('./utils/logger');
+const { setupWebhookServer } = require('./utils/webhook'); // Importer la fonction pour démarrer le serveur webhook
 const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds, // pour les événements de guild
-        GatewayIntentBits.GuildMessages, // pour recevoir les messages de guild
-        GatewayIntentBits.MessageContent, // nécessaire pour lire le contenu des messages
-        GatewayIntentBits.GuildVoiceStates, // nécessaire pour les états vocaux
-    ],
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildVoiceStates,
+  ],
 });
 
-// Collection pour les commandes
 client.commands = new Collection();
-client.config = { PREFIX }; // Assure-toi que le PREFIX est dans config
+client.config = { PREFIX };
 
-console.log(`Préfixe configuré: ${PREFIX}`); // Log pour vérifier le préfixe
+logger.success(`Préfixe configuré: ${PREFIX}`);
 
-// Charger les commandes
-const commandsPath = path.join(__dirname, 'commands'); // Corriger le chemin d'accès
-if (fs.existsSync(commandsPath)) {
-    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+(async () => {
+  try {
+    // Chargement centralisé des fichiers
+    await loadFiles('commands', 'command', client);
+    await loadFiles('events', 'event', client);
+    await loadFiles('tasks', 'task', client);
+    await loadFiles('utils', 'util', client);
 
-    for (const file of commandFiles) {
-        const command = require(path.join(commandsPath, file));
-        if (command.name) {
-            client.commands.set(command.name, command);
-            console.log(`✅ Commande chargée: ${command.name}`);
-        } else {
-            console.warn(`⚠️ La commande ${file} n'a pas de nom défini.`);
-        }
-    }
-} else {
-    console.warn(`⚠️ Le répertoire des commandes n'existe pas: ${commandsPath}`);
-}
+    logger.success('✅ Tous les modules ont été chargés avec succès.');
+  } catch (err) {
+    logger.error(`Erreur au chargement des fichiers: ${err.message}`);
+    process.exit(1);  // Quitte le processus en cas d'erreur critique
+  }
 
-// Charger les événements
-const eventsPath = path.join(__dirname, 'events'); // Corriger le chemin d'accès
-if (fs.existsSync(eventsPath)) {
-    const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
-
-    for (const file of eventFiles) {
-        const event = require(path.join(eventsPath, file));
-
-        // ⚠️ Empêche les doublons sur messageCreate
-        if (event.name === 'messageCreate') {
-            client.removeAllListeners('messageCreate');
-            console.log('🛠 Écouteur messageCreate réinitialisé.');
-        }
-
-        if (event.once) {
-            client.once(event.name, (...args) => event.execute(...args));
-        } else {
-            client.on(event.name, (...args) => event.execute(...args));
-        }
-
-        console.log(`✅ Événement chargé: ${event.name}`);
-    }
-} else {
-    console.warn(`⚠️ Le répertoire des événements n'existe pas: ${eventsPath}`);
-}
-
-// Charger les tâches
-const tasksPath = path.join(__dirname, 'tasks'); // Corriger le chemin d'accès
-if (fs.existsSync(tasksPath)) {
-    const taskFiles = fs.readdirSync(tasksPath).filter(file => file.endsWith('.js'));
-
-    for (const file of taskFiles) {
-        const task = require(path.join(tasksPath, file));
-        if (task.name) {
-            // Pour chaque tâche, on lance un intervalle si nécessaire
-            if (task.interval) {
-                setInterval(() => task.execute(client), task.interval); // On suppose que task.interval est en millisecondes
-            } else {
-                task.execute(client); // Tâche exécutée immédiatement
-            }
-            console.log(`✅ Tâche chargée: ${task.name}`);
-        } else {
-            console.warn(`⚠️ La tâche ${file} n'a pas de nom défini.`);
-        }
-    }
-} else {
-    console.warn(`⚠️ Le répertoire des tâches n'existe pas: ${tasksPath}`);
-}
-
-// Vérifie combien de fois l'événement messageCreate est attaché
-console.log(`🔍 Nombre d'écouteurs pour messageCreate: ${client.listenerCount('messageCreate')}`);
-
-// Démarrer le bot
-client.login(BOT_TOKEN);
+  // Connexion au bot
+  client.login(BOT_TOKEN)
+    .then(() => logger.success('🤖 Bot connecté avec succès.'))
+    .catch((err) => logger.error(`Erreur lors de la connexion du bot: ${err.message}`));
+})();
+    // Démarrer le serveur webhook après que le bot soit prêt
+    setupWebhookServer(client);
