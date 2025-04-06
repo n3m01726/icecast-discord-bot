@@ -28,6 +28,6 @@
     "engines": {
         "node": ">=16.0.0"
     },
-    "author": "Ton nom",
+    "author": "Denis Lapointe",
     "license": "MIT"
 }
