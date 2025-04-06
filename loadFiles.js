@@ -6,7 +6,7 @@ const loadFiles = async (folderName, type, client) => {
   const basePath = path.join(__dirname, folderName);
 
   if (!fs.existsSync(basePath)) {
-    logger.warn(`Dossier ${folderName} introuvable.`);
+    logger.warn(`Folder  ${folderName} not found.`);
     return;
   }
 
@@ -32,9 +32,9 @@ const loadFiles = async (folderName, type, client) => {
         case 'command':
           if (fileModule.name && typeof fileModule.execute === 'function') {
             client.commands.set(fileModule.name, fileModule);
-            logger.success(`Commande chargée: ${fileModule.name}`);
+            logger.success(`Command loaded: ${fileModule.name}`);
           } else {
-            logger.warn(`Commande invalide dans ${file}. Vérifie que 'name' et 'execute' existent et sont corrects.`);
+            logger.warn(`Invalid command in ${file}. Check that 'name' and 'execute' exist and are correct.`);
           }
           break;
 
@@ -46,9 +46,9 @@ const loadFiles = async (folderName, type, client) => {
             } else {
               client.on(fileModule.name, handler);
             }
-            logger.success(`Événement chargé: ${fileModule.name}`);
+            logger.success(`Event loaded: ${fileModule.name}`);
           } else {
-            logger.warn(`Événement invalide dans ${file}. Vérifie que 'name' et 'execute' existent et sont corrects.`);
+            logger.warn(`Invalid event in ${file}. Check that 'name' and 'execute' exist and are correct.`);
           }
           break;
 
@@ -59,22 +59,22 @@ const loadFiles = async (folderName, type, client) => {
             } else {
               fileModule.execute(client);
             }
-            logger.success(`Tâche chargée: ${fileModule.name}`);
+            logger.success(`Task loaded: ${fileModule.name}`);
           } else {
-            logger.warn(`Tâche invalide dans ${file}. Vérifie que 'name' et 'execute' existent et que 'interval' est correct.`);
+            logger.warn(`Invalid task in ${file}. Check that 'name', 'execute' and 'interval' exist and are correct.`);
           }
           break;
 
         case 'util':
-          logger.custom('UTIL', `Fichier utilitaire chargé: ${file}`, 'gray');
+          logger.custom('UTIL', `util file loaded : ${file}`, 'gray');
           break;
 
         default:
-          logger.warn(`Type non reconnu pour ${file}: ${type}`);
+          logger.warn(`Type not recognized for ${file}: ${type}`);
           break;
       }
     } catch (err) {
-      logger.error(`Erreur lors du chargement du fichier ${file}: ${err.message}`);
+      logger.error(`Error when loading ${file}: ${err.message}`);
     }
   }
 };
