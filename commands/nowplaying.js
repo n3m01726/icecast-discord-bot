@@ -10,7 +10,7 @@ module.exports = {
       const data = response.data;
       const currentSong = data?.icestats?.source?.title || "No song information available";
 
-      message.reply(`🎶 Présentement | 🎶 Now playing: **${currentSong}**`);
+      message.reply(` 🎶 Now playing: **${currentSong}**`);
     } catch (error) {
       console.error("Error fetching current song: ", error);
       message.reply("Unable to fetch current song.");

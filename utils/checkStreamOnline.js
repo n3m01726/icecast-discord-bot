@@ -1,5 +1,5 @@
 const axios = require('axios');
-const JSON_URL = "https://stream.soundshineradio.com:8445/status-json.xsl";
+const { JSON_URL } = process.env.JSON_URL;
 
 async function checkStreamOnline() {
     try {

@@ -20,8 +20,8 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor(0x3498db)
-                .setTitle('📋 Choisissez une langue / Choose a language')
-                .setDescription('Cliquez sur un des boutons ci-dessous pour voir l\'horaire.');
+                .setTitle('Choose a language')
+                .setDescription('Click on one of the buttons below to see the schedule.');
 
             const row = new ActionRowBuilder().addComponents(
                 new ButtonBuilder()
