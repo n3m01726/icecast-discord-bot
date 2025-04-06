@@ -1,4 +1,5 @@
 const axios = require('axios');
+require('dotenv').config();
 const { JSON_URL } = process.env.JSON_URL;
 
 async function checkStreamOnline() {
