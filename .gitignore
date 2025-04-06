@@ -28,5 +28,4 @@ _old/
 # Dossier de couverture de code Jest
 /coverage/
 
-# SoundSHINE Radio Config File
 config.js
