@@ -16,6 +16,7 @@
         "discord.js": "^14.0.0",
         "dotenv": "^16.0.0",
         "express": "^5.1.0",
+        "express-rate-limit": "^7.5.0",
         "he": "^1.2.0",
         "iconv-lite": "^0.6.3",
         "unidecode": "^1.1.0",

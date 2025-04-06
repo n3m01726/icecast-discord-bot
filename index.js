@@ -33,9 +33,6 @@ logger.success(`Préfixe configuré: ${PREFIX}`);
   }
 
   // Connexion au bot
-  client.login(BOT_TOKEN)
-    .then(() => logger.success('🤖 Bot connecté avec succès.'))
-    .catch((err) => logger.error(`Erreur lors de la connexion du bot: ${err.message}`));
-})();
+  client.login(BOT_TOKEN) })();
     // Démarrer le serveur webhook après que le bot soit prêt
     setupWebhookServer(client);
