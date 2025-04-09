@@ -1,7 +1,6 @@
 const axios = require('axios');
-const { JSON_URL } = "https://stream.soundshineradio.com:8445/status-json.xsl"
+const JSON_URL = require('../config');
 const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
-
 
 module.exports = {
   name: 'np',
@@ -12,9 +11,9 @@ module.exports = {
       const data = response.data;
       const currentSong = data?.icestats?.source?.title || "No song information available";
 
-      message.reply(`🎶 Now playing: **${currentSong}**`);
+      message.reply(`🎶 Présentement | 🎶 Now playing: **${currentSong}**`);
     } catch (error) {
-      logger.error("Error fetching current song:", error?.message || error);
+      logger.error("Error fetching current song: ",JSON_URL, error);
       message.reply("Unable to fetch current song.");
     }
   },
