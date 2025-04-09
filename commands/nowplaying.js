@@ -1,5 +1,6 @@
 const axios = require('axios');
 const JSON_URL = require('../config');
+const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
 
 module.exports = {
   name: 'np',
@@ -12,7 +13,7 @@ module.exports = {
 
       message.reply(`🎶 Présentement | 🎶 Now playing: **${currentSong}**`);
     } catch (error) {
-      console.error("Error fetching current song: ", error);
+      logger.error("Error fetching current song: ", error);
       message.reply("Unable to fetch current song.");
     }
   },

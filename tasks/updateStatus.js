@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { JSON_URL } = require('../config');
 const { ActivityType } = require('discord.js');
+const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
 
 async function updateStatus(client) {
   try {
@@ -12,11 +13,11 @@ async function updateStatus(client) {
     }
 
     await client.user.setActivity({ name: `📀 ${currentSong}`, type: ActivityType.Custom, url: 'https://soundshineradio.com' });
-    console.log(`Updated status to: ${currentSong}`);
+    logger.info(`Updated status to: ${currentSong}`);
   } catch (error) {
-    console.error('Error fetching metadata or updating status:', error);
+    logger.error('Error fetching metadata or updating status:', error);
     await client.user.setActivity("Soundshine Radio", { type: 'LISTENING' });
-    console.log('Fallback activity set to Soundshine Radio');
+    logger.info('Fallback activity set to Soundshine Radio');
   }
 }
 

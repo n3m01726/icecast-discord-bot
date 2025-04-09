@@ -1,10 +1,11 @@
 const { VOICE_CHANNEL_ID } = require('../config');
 const { joinVoiceChannel } = require('@discordjs/voice');
+const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
 
 async function ensureConnected(bot) {
     const voiceChannel = bot.channels.cache.get(VOICE_CHANNEL_ID);
     if (!voiceChannel) {
-        console.error('Le canal vocal spécifié est introuvable.');
+        logger.warn('Le canal vocal spécifié est introuvable.');
         return;
     }
 
@@ -18,7 +19,7 @@ async function ensureConnected(bot) {
             });
             console.log(`Connecté au canal vocal: ${voiceChannel.name}`);
         } catch (error) {
-            console.error('Erreur lors de la connexion au canal vocal:', error);
+            logger.error('Erreur lors de la connexion au canal vocal:', error);
         }
     }
 }

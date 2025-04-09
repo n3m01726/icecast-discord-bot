@@ -1,5 +1,6 @@
 const { getVoiceConnection } = require('@discordjs/voice');
 const { ADMIN_ROLE_ID } = require('../config'); // Importer l'ID du rôle admin
+const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
 
 module.exports = {
     name: 'stop',

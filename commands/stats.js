@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { ADMIN_ROLE_ID, JSON_URL } = require('../config'); // Importer les informations nécessaires
+const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
 
 module.exports = {
     name: 'stats',
@@ -18,7 +19,7 @@ module.exports = {
             const statsMessage = `**Stream Stats**:\n Current listeners: ${listeners}\n Bitrate: ${bitrate} kbps`;
             message.channel.send(statsMessage);
         } catch (error) {
-            console.error('Error fetching stream stats:', error);
+            logger.error('Error fetching stream stats:', error);
             message.reply("Impossible de récupérer les statistiques du stream.");
         }
     },

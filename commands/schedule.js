@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
+const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
 
 module.exports = {
     name: 'schedule',
@@ -67,7 +68,7 @@ module.exports = {
             });
 
         } catch (error) {
-            console.error("Error reading schedule: ", error);
+            logger.error("Error reading schedule: ", error);
             message.reply("Unable to fetch the schedule.");
         }
     },

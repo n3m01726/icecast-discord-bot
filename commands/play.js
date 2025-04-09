@@ -1,6 +1,7 @@
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 const { checkStreamOnline } = require('../utils/checkStreamOnline');
 const { STREAM_URL } = require('../config');
+const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
 module.exports = {
     name: 'play',
     description: 'Play the stream in the voice channel (including Stage Channels)',
@@ -29,9 +30,9 @@ module.exports = {
         if (voiceChannel.type === 13) { // Type 13 = Stage Channel
             try {
                 await message.guild.members.me.voice.setSuppressed(false);
-                console.log("✅ Request to Speak sent!");
+                logger.success("✅ Request to Speak sent!");
             } catch (error) {
-                console.warn("⚠️ Unable to request to speak. The bot might not have the necessary permissions.");
+                logger.error("⚠️ Unable to request to speak. The bot might not have the necessary permissions.");
             }
         }
 
@@ -43,7 +44,7 @@ module.exports = {
         connection.subscribe(player);
 
         player.on(AudioPlayerStatus.Idle, () => {
-            console.log("Stream ended, disconnecting...");
+            logger.info("Stream ended, disconnecting...");
             connection.destroy();
         });
 

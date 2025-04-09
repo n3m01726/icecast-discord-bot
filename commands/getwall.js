@@ -1,5 +1,6 @@
 const axios = require('axios');
 const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_API;
+const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
 
 module.exports = {
   name: 'getwall',
@@ -15,7 +16,7 @@ module.exports = {
         message.reply("Couldn't fetch a photo, try again later.");
       }
     } catch (error) {
-      console.error("Error fetching photo from Unsplash: ", error);
+      logger.error("Error fetching photo from Unsplash: ", error);
       message.reply("Unable to fetch a random photo.");
     }
   },

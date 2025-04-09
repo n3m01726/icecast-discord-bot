@@ -1,5 +1,6 @@
 const axios = require('axios');
 const JSON_URL = "https://stream.soundshineradio.com:8445/status-json.xsl";
+const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
 
 async function checkStreamOnline() {
     try {
@@ -8,7 +9,7 @@ async function checkStreamOnline() {
 
         return data?.icestats?.source?.title !== "";
     } catch (error) {
-        console.error("Error checking stream status: ", error);
+        logger.error("Error checking stream status: ", error);
         return false;
     }
 }
