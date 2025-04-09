@@ -13,7 +13,7 @@ module.exports = {
 
       message.reply(`🎶 Now playing: **${currentSong}**`);
     } catch (error) {
-      logger.error("Error fetching current song: ", error);
+      logger.error("Error fetching current song:", error?.message || error);
       message.reply("Unable to fetch current song.");
     }
   },
