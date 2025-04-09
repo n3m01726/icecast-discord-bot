@@ -3,7 +3,6 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { BOT_TOKEN, PREFIX } = require('./config');
 const loadFiles = require('./loadFiles');
 const logger = require('./utils/logger');
-const { setupWebhookServer } = require('./utils/webhook');
 
 const client = new Client({
   intents: [
@@ -27,8 +26,6 @@ logger.success(`Préfixe configuré: ${PREFIX}`);
     await loadFiles('tasks', 'task', client);
     await loadFiles('utils', 'util', client);
 console.log(``);
-    // 🔽 Démarre le webhook pendant le chargement des utils
-    setupWebhookServer(client);
 
     logger.success('Tous les modules ont été chargés avec succès.');
   } catch (err) {
