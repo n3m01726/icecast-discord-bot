@@ -1,5 +1,6 @@
 const axios = require('axios');
-const JSON_URL = require('../config');
+const { JSON_URL } = "https://stream.soundshineradio.com:8445/status-json.xsl"
+const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
 
 
 module.exports = {
@@ -13,7 +14,7 @@ module.exports = {
 
       message.reply(`🎶 Now playing: **${currentSong}**`);
     } catch (error) {
-      console.log("Error fetching current song:", error?.message || error);
+      logger.error("Error fetching current song:", error?.message || error);
       message.reply("Unable to fetch current song.");
     }
   },
