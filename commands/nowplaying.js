@@ -1,5 +1,5 @@
 const axios = require('axios');
-const JSON_URL = require('../config');
+const { JSON_URL } = require('../config');
 const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
 
 module.exports = {
