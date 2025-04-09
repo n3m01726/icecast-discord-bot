@@ -15,7 +15,7 @@ module.exports = {
             const listeners = data.icestats.source.listeners || 'N/A';
             const bitrate = data.icestats.source.bitrate || 'N/A';
 
-            const statsMessage = `📊 **Stream Stats**:\n👂 **Current listeners**: ${listeners}\n📈 **Bitrate**: ${bitrate} kbps`;
+            const statsMessage = `**Stream Stats**:\n Current listeners: ${listeners}\n Bitrate: ${bitrate} kbps`;
             message.channel.send(statsMessage);
         } catch (error) {
             console.error('Error fetching stream stats:', error);

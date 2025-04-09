@@ -1,12 +1,12 @@
+require('dotenv').config();
 const express = require('express');
 const rateLimit = require('express-rate-limit');
-require('dotenv').config();
+const logger = require('../utils/logger');
 
 function setupWebhookServer(client) {
     const app = express();
     const PORT = process.env.WEBHOOK_PORT || 3690;
-
-    const allowedIPs = ['127.0.0.1', '::1']; // Ajoute ici les IPs autorisées
+    const allowedIPs = process.env.ALLOWED_IPS.split(','); // Ajouter les IPs autorisées ici
 
     // Middleware pour filtrer les IPs
     app.use((req, res, next) => {
@@ -17,37 +17,70 @@ function setupWebhookServer(client) {
         next();
     });
 
-    // Middleware rate limiter
+    // Limiteur de requêtes
     const limiter = rateLimit({
         windowMs: 15 * 60 * 1000,
         max: 20,
         standardHeaders: true,
         legacyHeaders: false,
     });
-    app.use('/v1/rotation', limiter); // Endpoint masqué
+    app.use('/v1/rotation', limiter);
 
     app.use(express.json());
 
-    // Point d'entrée webhook sécurisé
-    app.post('/v1/rotation', (req, res) => { 
-        const { message, webhookSecret } = req.body;
+    // Webhook POST
+    app.post('/v1/rotation', (req, res) => {
+        const { playlist, webhookSecret, role } = req.body;
         const expectedSecret = process.env.WEBHOOK_SECRET;
-        const textChannelId = process.env.CHANNEL_ID;
-
+        const textChannelId = process.env.ANNOUNCEMENTS_CHANNEL_ID;
         if (webhookSecret !== expectedSecret) {
             return res.status(403).json({ error: 'Clé secrète invalide.' });
         }
 
-        if (!message) {
-            return res.status(400).json({ error: 'Le paramètre "message" est requis.' });
+        if (!playlist) {
+            return res.status(400).json({ error: 'Le paramètre "playlist" est requis.' });
         }
-
+        if (!role) {
+            return res.status(400).json({ error: 'Le paramètre "role" est requis.' });
+        }
         client.channels.fetch(textChannelId)
             .then(channel => {
                 if (!channel || channel.type !== 0) {
                     throw new Error('Le canal spécifié n\'est pas un canal textuel.');
                 }
-                return channel.send(`📢 **Notification :** ${message}`);
+                return channel.send(`<@&${role}> Playlist en cours : **${playlist}**`);
+            })
+            .then(() => {
+                logger.success(`[Webhook] Message envoyé dans #${textChannelId} : ${playlist}`);
+                res.json({ success: true, message: 'Message envoyé avec succès.' });
+            })
+            .catch(error => {
+                res.status(500).json({ error: 'Erreur interne.', details: error.message });
+            });
+    });
+
+    // Webhook GET
+    app.get('/v1/rotation', (req, res) => {
+        const { webhookSecret, playlist, role } = req.query;  // Paramètres dans l'URL
+    
+        // Vérifie si le secret correspond
+        const expectedSecret = process.env.WEBHOOK_SECRET;
+    
+        if (webhookSecret !== expectedSecret) {
+            return res.status(403).json({ error: 'Clé secrète invalide.' });
+        }
+    
+        if (!playlist) {
+            return res.status(400).json({ error: 'Le paramètre "playlist" est requis.' });
+        }
+    const textChannelId = process.env.ANNOUNCEMENTS_CHANNEL_ID;
+        // Envoie le message à Discord
+        client.channels.fetch(textChannelId)
+            .then(channel => {
+                if (!channel || channel.type !== 0) {
+                    throw new Error('Le canal spécifié n\'est pas un canal textuel.');
+                }
+                return channel.send(`<@&${role}> 🔊 Playlist en cours : **${playlist}**`);
             })
             .then(() => {
                 res.json({ success: true, message: 'Message envoyé avec succès.' });
@@ -56,13 +89,10 @@ function setupWebhookServer(client) {
                 res.status(500).json({ error: 'Erreur interne.', details: error.message });
             });
     });
-
-    app.get('/v1/rotation', (req, res) => {
-        res.json({ success: true, message: 'Le serveur webhook fonctionne correctement.' });
-    });
+    
 
     app.listen(PORT, () => {
-        console.log(`Serveur webhook en écoute sur le port ${PORT}`);
+        logger.success(`Serveur webhook en écoute sur le port ${PORT} (http://localhost:${PORT})`);
     });
 }
 

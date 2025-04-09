@@ -3,7 +3,8 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { BOT_TOKEN, PREFIX } = require('./config');
 const loadFiles = require('./loadFiles');
 const logger = require('./utils/logger');
-const { setupWebhookServer } = require('./utils/webhook'); // Importer la fonction pour démarrer le serveur webhook
+const { setupWebhookServer } = require('./utils/webhook');
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -25,11 +26,14 @@ logger.success(`Préfixe configuré: ${PREFIX}`);
     await loadFiles('events', 'event', client);
     await loadFiles('tasks', 'task', client);
     await loadFiles('utils', 'util', client);
+console.log(``);
+    // 🔽 Démarre le webhook pendant le chargement des utils
+    setupWebhookServer(client);
 
-    logger.success('✅ Tous les modules ont été chargés avec succès.');
+    logger.success('Tous les modules ont été chargés avec succès.');
   } catch (err) {
     logger.error(`Erreur au chargement des fichiers: ${err.message}`);
-    process.exit(1);  // Quitte le processus en cas d'erreur critique
+    process.exit(1);
   }
 
   // Connexion au bot
@@ -37,5 +41,3 @@ logger.success(`Préfixe configuré: ${PREFIX}`);
     .then(() => logger.success('🤖 Bot connecté avec succès.'))
     .catch((err) => logger.error(`Erreur lors de la connexion du bot: ${err.message}`));
 })();
-    // Démarrer le serveur webhook après que le bot soit prêt
-    setupWebhookServer(client);
