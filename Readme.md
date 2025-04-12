@@ -2,7 +2,7 @@
 
 A Discord bot to stream your station directly from your Discord server.
 
-ℹ️ Check it in action on my Discord Channel: [https://discord.gg/KGrASfvMBv](https://discord.gg/KGrASfvMBv) 
+ℹ️ Check it in action on my Discord Channel: [https://discord.gg/DpgzXGRsWB](https://discord.gg/DpgzXGRsWB) 
 
 
 ## 🚀 Features
