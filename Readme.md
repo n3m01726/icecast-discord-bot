@@ -18,7 +18,6 @@ A Discord bot to stream your station directly from your Discord server.
 
 - [Node.js](https://nodejs.org/) with [discord.js](https://discord.js.org/)
 - [Icecast API](http://icecast.org/) for stream metadata
-- Dynamic config loading (dev / prod) via JSON
 - Modular command, event, and task loaders
 
 ## 📜 Installation
