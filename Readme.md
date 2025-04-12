@@ -10,7 +10,6 @@ A Discord bot to stream your station directly from your Discord server.
 - 🎶 **Now playing display**: Shows the currently playing track.
 - 🔄 **Auto status update**: Updates the bot's status with the current track.
 - 🎙️ **Auto speaker role**: Automatically joins as a speaker in voice channels.
-- 🛠️ **Moderation tools**: Commands to help manage the community.
 - 📊 **Statistics**: Command to show radio stream stats with interactive buttons.
 - 🏞️ **Get a wallpaper**: Fetches a random wallpaper from Unsplash.
 - 📅 **Schedule viewer**: Shows a bilingual (FR/EN) schedule via buttons.
@@ -89,6 +88,7 @@ npm start
 - ✅ Role-based access for admin-only commands
 
 ## 🧠 Planned Features / TODO
+- 🛠️ Moderation tools: Commands to help manage the community.
 - 🔄 Auto-refresh now playing every X seconds
 - 🗓️ Integration with Google Calendar / Notion / Airtable for show planning
 - 💬 Slash commands + autocomplete
