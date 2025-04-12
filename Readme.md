@@ -1,67 +1,100 @@
-# 🎵 soundSHINE Radio Bot
+# 🎵 soundSHINE Bot
 
-Bot Discord permettant de diffuser et gérer soundSHINE Radio directement depuis un serveur Discord.
+A Discord bot to stream your station directly from your Discord server.
 
-## 🚀 Fonctionnalités
+## 🚀 Features
 
-- 🔊 **Lecture du stream** : Se connecte automatiquement à un salon vocal et joue la radio.
-- 🎶 **Affichage du titre en cours** : Affiche la chanson actuellement diffusée.
-- 🔄 **Mise à jour du statut** : Change automatiquement le statut du bot avec la musique en cours.
-- 🎙️ **Prise de parole automatique** : Se met automatiquement en tant qu'intervenant sur les salons vocaux.
-- 🛠️ **Modération** : Intégration de commandes pour aider à gérer la communauté.
-- 📊 **Statistiques** : Commande pour afficher les statistiques de la radio.
-- 🏞️ **Get a wallpaper** : Commande pour afficher un wallpaper de Unsplash
-- 📅 **Horaire** : Affiche l'horaire en embed (FR/EN)
+- 🔊 **Stream playback**: Automatically connects to a voice channel and streams the radio.
+- 🎶 **Now playing display**: Shows the currently playing track.
+- 🔄 **Auto status update**: Updates the bot's status with the current track.
+- 🎙️ **Auto speaker role**: Automatically joins as a speaker in voice channels.
+- 🛠️ **Moderation tools**: Commands to help manage the community.
+- 📊 **Statistics**: Command to show radio stream stats with interactive buttons.
+- 🏞️ **Get a wallpaper**: Fetches a random wallpaper from Unsplash.
+- 📅 **Schedule viewer**: Shows a bilingual (FR/EN) schedule via buttons.
 
-## 🏗️ Technologies utilisées
+## 🏗️ Tech Stack
 
-- [Node.js](https://nodejs.org/) avec [discord.js](https://discord.js.org/)
-- [Icecast API](http://icecast.org/) pour récupérer les métadonnées du stream
+- [Node.js](https://nodejs.org/) with [discord.js](https://discord.js.org/)
+- [Icecast API](http://icecast.org/) for stream metadata
+- Dynamic config loading (dev / prod) via JSON
+- Modular command, event, and task loaders
 
 ## 📜 Installation
 
-### 1. Cloner le repo
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/n3m01726/soundshine-bot.git
+cd soundshine-bot
+```
+### 2. Install dependencies
+`npm install`
+
+### 3. Configure your environment
+Create a file named .env at the root of your project (optional, depending on your setup), or use config/dev.json or config/prod.json.
+
+Example dev.json:
 
 ```
-   git clone https://github.com/n3m01726/soundshine-bot.git
-   cd soundshine-bot
+{
+  "BOT_TOKEN": "your_discord_bot_token",
+  "PREFIX": "!s",
+  "STREAM_URL": "https://your-stream-url.com/stream",
+  "JSON_URL": "https://your-stream-url.com/status-json.xsl",
+  "UNSPLASH_ACCESS_KEY": "your_unsplash_key",
+  "VOICE_CHANNEL_ID": "123456789",
+  "OWNER_ROLE_ID": "owner_role_id",
+  "ADMIN_ROLE_ID": "admin_role_id",
+  "ANNOUNCEMENTS_CHANNEL_ID": "channel_id",
+  "BOT_ROLE_NAME": "soundSHINE"
+}
+```
+Set the environment using:
+
+```
+NODE_ENV=dev node index.js
 ```
 
-### 2. Installer les dépendances
+Or use a start script in package.json to automate that.
 
-`npm i`
-
-### 3. Configurer le fichier .env
-
-Crée un fichier .env à la racine du projet et ajoute les informations suivantes :
+### 4. Start the bot
+```
+node index.js
+```
+Or:
+```
+npm start
 
 ```
-BOT_TOKEN=your_discord_bot_token
-PREFIX=!s
-STREAM_URL=YourstreamURL
-```
 
-### 4. Lancer le bot
+## 🔧 Core Commands
+| Command | Description |
+|----------|-----------|
+|`!s play`	|   Connects the bot to a voice channel and plays the stream |
+|`!s np`	  |    Shows the currently playing track |
+|`!s stop`	 |  Stops the stream and disconnects from voice channel |
+|`!s stats`	|   Shows listener stats + buttons for full stats and history |
+|`!s getwall`|	Displays a random wallpaper from Unsplash |
+|`!s schedule`|	Shows the current schedule in FR or EN (user chooses) |
 
-`node index.js` ou `npm start`
+## 🆕 Recent Additions
+- ✅ Modular architecture for commands, events, tasks
+- ✅ Interactive buttons in !sstats and !sschedule
+- ✅ Bilingual schedule support (FR/EN)
+- ✅ Dynamic environment-based config (dev.json, prod.json)
+- ✅ Error handling and logging with winston
+- ✅ Role-based access for admin-only commands
 
-### 🔧 Commandes principales
+## 🧠 Planned Features / TODO
+- 🔄 Auto-refresh now playing every X seconds
+- 🗓️ Integration with Google Calendar / Notion / Airtable for show planning
+- 💬 Slash commands + autocomplete
+- 🛎️ Notification system when a new show starts
+- 📻 Command to add new shows to the stream via API
 
-| Commande   | Description                                        |
-| ---------- | -------------------------------------------------- |
-| !splay     |  Connecte le bot à un salon vocal et joue la radio |
-| !snp       |  Affiche la musique actuellement jouée             |
-| !sstop     |  Déconnecte le bot du salon vocal                  |
-| !sstats    |  Affiche les statistiques de la radio              |
-| !sgetwall  |  Affiche un walllpaper de Unsplash                 |
-| !sschedule |  Affiche l'horaire de la radio                     |
+## 🤝 Contributing
+All help is welcome! Feel free to open an issue or pull request if you'd like to contribute a feature or fix.
 
-### 📌 TODO / Améliorations futures
-
-### 🤝 Contribuer
-
-Toute aide est bienvenue! Ouvre une issue ou une pull request si tu souhaites proposer une amélioration!
-
-### 📜 Licence
-
-Ce projet est sous licence MIT.
+## 📜 License
+This project is licensed under the MIT License.
