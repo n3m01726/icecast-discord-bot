@@ -2,8 +2,10 @@
 
 A Discord bot to stream your station directly from your Discord server.
 
-## 🚀 Features
+ℹ️ Check it in action on my Discord Channel: [https://discord.gg/KGrASfvMBv](https://discord.gg/KGrASfvMBv) 
 
+
+## 🚀 Features
 - 🔊 **Stream playback**: Automatically connects to a voice channel and streams the radio.
 - 🎶 **Now playing display**: Shows the currently playing track.
 - 🔄 **Auto status update**: Updates the bot's status with the current track.
