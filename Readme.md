@@ -83,11 +83,11 @@ npm start
 - ✅ Modular architecture for commands, events, tasks
 - ✅ Interactive buttons in !sstats and !sschedule
 - ✅ Bilingual schedule support (FR/EN)
-- ✅ Dynamic environment-based config (dev.json, prod.json)
 - ✅ Error handling and logging with winston
 - ✅ Role-based access for admin-only commands
 
 ## 🧠 Planned Features / TODO
+- 🛠️ Dynamic environment-based config (dev.json, prod.json)
 - 🛠️ Moderation tools: Commands to help manage the community.
 - 🔄 Auto-refresh now playing every X seconds
 - 🗓️ Integration with Google Calendar / Notion / Airtable for show planning
