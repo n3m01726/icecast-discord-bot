@@ -1,11 +1,11 @@
 {
     "name": "soundshine-bot",
-    "version": "1.0.0",
+    "version": "0.3.0-beta",
     "description": "A Discord bot for Soundshine Radio",
     "main": "index.js",
     "scripts": {
-        "start": "node index.js",
-        "dev": "nodemon index.js",
+        "start": "NODE_ENV=prod node index.js",
+        "dev": "NODE_ENV=dev node index.js",
         "test": "jest"
     },
     "dependencies": {

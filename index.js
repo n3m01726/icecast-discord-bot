@@ -1,6 +1,6 @@
 // index.js
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
-const { BOT_TOKEN, PREFIX } = require('./config');
+const config = require('./config/');
 const loadFiles = require('./loadFiles');
 const logger = require('./utils/logger');
 
@@ -14,9 +14,9 @@ const client = new Client({
 });
 
 client.commands = new Collection();
-client.config = { PREFIX };
+client.config = { PREFIX: config.PREFIX };
 
-logger.success(`Préfixe configuré: ${PREFIX}`);
+logger.success(`Préfixe configuré: ${config.PREFIX}`);
 
 (async () => {
   try {
@@ -34,7 +34,7 @@ console.log(``);
   }
 
   // Connexion au bot
-  client.login(BOT_TOKEN)
+  client.login(config.BOT_TOKEN)
     .then(() => logger.success('🤖 Bot connecté avec succès.'))
     .catch((err) => logger.error(`Erreur lors de la connexion du bot: ${err.message}`));
 })();

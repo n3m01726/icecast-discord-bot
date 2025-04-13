@@ -1,5 +1,5 @@
 const axios = require('axios');
-const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_API;
+const config = require('../config/');
 const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
   description: 'Fetches a random photo from Unsplash',
   async execute(message) {
     try {
-      const response = await axios.get(`https://api.unsplash.com/photos/random?client_id=${UNSPLASH_ACCESS_KEY}&count=1`);
+      const response = await axios.get(`https://api.unsplash.com/photos/random?client_id=${config.UNSPLASH_ACCESS_KEY}&count=1`);
       const photoUrl = response.data[0]?.urls?.regular;
 
       if (photoUrl) {
@@ -18,6 +18,7 @@ module.exports = {
     } catch (error) {
       logger.error("Error fetching photo from Unsplash: ", error);
       message.reply("Unable to fetch a random photo.");
+      console.error(error); // Log the error for debugging
     }
   },
 };
