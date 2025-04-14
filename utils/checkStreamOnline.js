@@ -7,7 +7,7 @@ async function checkStreamOnline() {
         const response = await axios.get(JSON_URL);
         const data = response.data;
 
-        return data?.icestats?.source?.title !== "";
+        return data?.icestats?.source?.title !== ";
     } catch (error) {
         logger.error("Error checking stream status: ", error);
         return false;
