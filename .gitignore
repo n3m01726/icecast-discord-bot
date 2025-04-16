@@ -11,7 +11,7 @@ yarn-error.log
 logs/
 *.log
 npm-debug.log*
-
+*.mp3
 # OS generated files
 .DS_Store
 Thumbs.db
@@ -28,3 +28,4 @@ _old/
 
 # Dossier de couverture de code Jest
 /coverage/
+icecast-discord-bot.code-workspace

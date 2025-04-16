@@ -75,6 +75,7 @@ const loadFiles = async (folderName, type, client) => {
       }
     } catch (err) {
       logger.error(`Error when loading ${file}: ${err.message}`);
+      console.error(err);
     }
   }
 };
