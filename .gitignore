@@ -27,3 +27,5 @@ _old/
 # Dossier de couverture de code Jest
 /coverage/
 icecast-discord-bot.code-workspace
+config/dev.json
+config/prod.json
