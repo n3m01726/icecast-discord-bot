@@ -1,75 +1,42 @@
-const fs = require('fs');
-const path = require('path');
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
-const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
+const { SlashCommandBuilder } = require('discord.js');
+const { getSchedule } = require('../utils/database'); // Utilisation de la fonction de récupération
 
 module.exports = {
-    name: 'schedule',
-    description: 'Displays the current schedule of programs',
-    async execute(message) {
-        try {
-            const schedulePath = path.join(__dirname, '..', 'schedule.txt');
-            const scheduleContent = fs.readFileSync(schedulePath, 'utf-8');
+  data: new SlashCommandBuilder()
+    .setName('schedule')
+    .setDescription('🗓️ Affiche le programme du stream')
+    .addStringOption(option =>
+      option.setName('jour')
+        .setDescription('Le jour de la semaine pour le programme (ex. lundi, mardi, etc.)')
+        .setRequired(false)
+        .addChoices(
+          { name: 'Lundi', value: 'lundi' },
+          { name: 'Mardi', value: 'mardi' },
+          { name: 'Mercredi', value: 'mercredi' },
+          { name: 'Jeudi', value: 'jeudi' },
+          { name: 'Vendredi', value: 'vendredi' },
+          { name: 'Samedi', value: 'samedi' },
+          { name: 'Dimanche', value: 'dimanche' }
+        )
+    ),
+  
+  async execute(interaction) {
+    const jour = interaction.options.getString('jour') || 'lundi'; // Par défaut, lundi
 
-            const sections = scheduleContent.split("🗓");
-            const enRaw = sections[1]?.trim() || "No data available.";
-            const frRaw = sections[2]?.trim() || "Aucune donnée disponible.";
+    try {
+      const programs = await getSchedule(jour);
+      if (!programs || programs.length === 0) {
+        return interaction.reply(`❌ Aucun programme trouvé pour ${jour}.`);
+      }
 
-            // Enlève la première ligne (le titre interne)
-            const enSchedule = enRaw.split('\n').slice(1).join('\n').trim();
-            const frSchedule = frRaw.split('\n').slice(1).join('\n').trim();
+      const scheduleMessage = `**Programme du ${jour.charAt(0).toUpperCase() + jour.slice(1)}**:\n` +
+        programs.map((entry, index) => `${index + 1}. **${entry.title}** à ${entry.time}`).join('\n');
 
-            const embed = new EmbedBuilder()
-                .setColor(0x3498db)
-                .setTitle('Choose a language')
-                .setDescription('Click on one of the buttons below to see the schedule.');
+      await interaction.reply(scheduleMessage);
 
-            const row = new ActionRowBuilder().addComponents(
-                new ButtonBuilder()
-                    .setCustomId('schedule_fr')
-                    .setLabel('Français')
-                    .setStyle(ButtonStyle.Primary),
-                new ButtonBuilder()
-                    .setCustomId('schedule_en')
-                    .setLabel('English')
-                    .setStyle(ButtonStyle.Secondary)
-            );
-
-            await message.reply({ embeds: [embed], components: [row] });
-
-            // Interaction collector (à déplacer dans un fichier events si tu veux centraliser)
-            const collector = message.channel.createMessageComponentCollector({
-                filter: interaction => interaction.user.id === message.author.id,
-                time: 15_000
-            });
-
-            collector.on('collect', async interaction => {
-                if (interaction.customId === 'schedule_fr') {
-                    await interaction.update({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor(0xf1c40f)
-                                .setTitle('**Horaire (Version Française)**')
-                                .setDescription(frSchedule)
-                        ],
-                        components: []
-                    });
-                } else if (interaction.customId === 'schedule_en') {
-                    await interaction.update({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor(0x2ecc71)
-                                .setTitle('**Schedule (English version)**')
-                                .setDescription(enSchedule)
-                        ],
-                        components: []
-                    });
-                }
-            });
-
-        } catch (error) {
-            logger.error("Error reading schedule: ", error);
-            message.reply("Unable to fetch the schedule.");
-        }
-    },
+    } catch (error) {
+      console.error('Erreur lors de la récupération du programme :', error);
+      interaction.reply("Impossible de récupérer le programme du stream.");
+    }
+  },
 };

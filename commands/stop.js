@@ -1,24 +1,37 @@
-const { getVoiceConnection } = require('@discordjs/voice');
-const { ADMIN_ROLE_ID } = require('../config'); // Importer l'ID du rôle admin
-const logger = require('../utils/logger'); // Assurez-vous d'avoir un logger configuré
+const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    name: 'stop',
-    description: 'Arrête le stream et déconnecte le bot du salon vocal',
-    async execute(message) {
-        // Vérifie si l'utilisateur est admin
-        if (!message.member.roles.cache.has(ADMIN_ROLE_ID)) {
-            return message.reply("Cette commande est réservée aux administrateurs.");
-        }
+  data: new SlashCommandBuilder()
+    .setName('stop')
+    .setDescription('⛔ Stop the music and make the bot leave the voice channel')
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator), // Admin only
+  async execute(interaction) {
+    const guild = interaction.guild;
+    const member = guild.members.me;
 
-        // Récupérer la connexion vocale actuelle du bot
-        const connection = getVoiceConnection(message.guild.id);
+    if (!member.voice.channel) {
+      return interaction.reply({ content: "❌ I'm not connected to any voice channel.", ephemeral: true });
+    }
 
-        if (connection) {
-            connection.destroy(); // Déconnecte le bot
-            return message.reply("Le stream a été arrêté et le bot a quitté le salon vocal.");
-        } else {
-            return message.reply("Le bot n'est pas connecté à un salon vocal.");
-        }
-    },
+    try {
+      const channelName = member.voice.channel.name;
+      member.voice.disconnect();
+
+      const embed = new EmbedBuilder()
+        .setColor(0xff5555)
+        .setTitle('🛑 Disconnected')
+        .setDescription(`Left the voice channel **${channelName}**.`)
+        .setFooter({ text: `Requested by ${interaction.user.username}`, iconURL: interaction.user.displayAvatarURL() })
+        .setTimestamp();
+
+      await interaction.reply({ embeds: [embed] });
+
+    } catch (error) {
+      console.error(error);
+      await interaction.reply({
+        content: "⚠️ Something went wrong while trying to leave the voice channel.",
+        ephemeral: true
+      });
+    }
+  }
 };
